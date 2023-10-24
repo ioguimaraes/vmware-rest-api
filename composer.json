@@ -1,0 +1,48 @@
+{
+  "name": "ioguimaraes/vmware-rest-api",
+  "type": "library",
+  "description": "A library for access and management vmweare info",
+  "license": "MIT",
+  "keywords": [
+    "vmware",
+    "vmware php",
+    "php",
+    "inventory",
+    "vcenter",
+    "cluster",
+    "datastore",
+    "vms",
+    "virtualization"
+  ],
+  "authors": [
+    {
+      "name": "Igor de Oliveira Guimarães",
+      "email": "ig.oliveragui@gmail.com",
+      "homepage": "https://ioguimaraes.com/"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "vmwareRestPHP\\": "src"
+    }
+  },
+  "require": {
+    "php": ">=7.4.0",
+    "ext-hash": "*",
+    "ext-curl": "*",
+    "ext-json": "*",
+    "vlucas/phpdotenv":"*"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "repositories": [{
+    "type": "composer",
+    "url": "https://packagist.org",
+    "options": {
+      "ssl":  {
+        "verify_peer": false,
+        "allow_self_signed": true
+      }
+    }
+  }]
+}

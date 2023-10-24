@@ -1,0 +1,5 @@
+**/.idea
+**/*.iml
+vendor
+**/.local
+composer.lock
