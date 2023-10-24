@@ -250,7 +250,7 @@ $vm = $api->getVirtualMachines($session_id['data']['value'], [], $vms['data']['v
             "bios_uuid": "4228c71f-4d7d-967f-0831-b4180e5b207c"
         },
         "nvme_adapters": [],
-        "name": "ap3std0518",
+        "name": "Teste_vm1",
         "nics": [
             {
                 "value": {
