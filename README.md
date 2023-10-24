@@ -92,7 +92,7 @@ The vcenter vm package provides services for managing virtual machines.
 * VM Hardware Basic
 * VM HArdware Adapter
 * VM Hardware Boot
-* VM Hardware Info
+* VM Hardware Other Info
 * VM Power
 * VM Storage Policy
 
@@ -340,4 +340,567 @@ $vm = $api->getVirtualMachines($session_id['data']['value'], [], $vms['data']['v
 */
 
 
+```
+
+### Create VM
+
+Creates a virtual machine. if you do not have all of the privileges described as follows: - The resource Folder referenced by the attribute VM.InventoryPlacementSpec.folder requires VirtualMachine.Inventory.Create.
+
+Below are parameters that can be filled in when creating machines.
+
+```
+$params = 
+{
+    "boot": {
+        "delay": 0,
+        "efi_legacy_boot": false,
+        "enter_setup_mode": false,
+        "network_protocol": "IPV4",
+        "retry": false,
+        "retry_delay": 0,
+        "type": "BIOS"
+    },
+    "boot_devices": [ {
+        "type": "CDROM"
+    } ],
+    "cdroms": [ {
+        "allow_guest_control": false,
+        "backing": {
+            "device_access_type": "EMULATION",
+            "host_device": "",
+            "iso_file": "",
+            "type": "ISO_FILE"
+        },
+        "ide": {
+            "master": false,
+            "primary": false
+        },
+        "sata": {
+            "bus": 0,
+            "unit": 0
+        },
+        "start_connected": false,
+        "type": "IDE"
+    } ],
+    "cpu": {
+        "cores_per_socket": 0,
+        "count": 0,
+        "hot_add_enabled": false,
+        "hot_remove_enabled": false
+    },
+    "disks": [ {
+        "backing": {
+            "type": "VMDK_FILE",
+            "vmdk_file": ""
+        },
+        "ide": {
+            "master": false,
+            "primary": false
+        },
+        "new_vmdk": {
+            "capacity": 0,
+            "name": "",
+            "storage_policy": {
+                "policy": ""
+            }
+        },
+        "nvme": {
+            "bus": 0,
+            "unit": 0
+        },
+        "sata": {
+            "bus": 0,
+            "unit": 0
+        },
+        "scsi": {
+            "bus": 0,
+            "unit": 0
+        },
+        "type": "IDE"
+    } ],
+    "floppies": [ {
+        "allow_guest_control": false,
+        "backing": {
+            "host_device": "",
+            "image_file": "",
+            "type": "IMAGE_FILE"
+        },
+        "start_connected": false
+    } ],
+    "guest_OS": "DOS",
+    "hardware_version": "VMX_03",
+    "memory": {
+        "hot_add_enabled": false,
+        "size_MiB": 0
+    },
+    "name": "",
+    "nics": [ {
+        "allow_guest_control": false,
+        "backing": {
+            "distributed_port": "",
+            "network": "",
+            "type": "STANDARD_PORTGROUP"
+        },
+        "mac_address": "",
+        "mac_type": "MANUAL",
+        "pci_slot_number": 0,
+        "start_connected": false,
+        "type": "E1000",
+        "upt_compatibility_enabled": false,
+        "wake_on_lan_enabled": false
+    } ],
+    "nvme_adapters": [ {
+        "bus": 0,
+        "pci_slot_number": 0
+    } ],
+    "parallel_ports": [ {
+        "allow_guest_control": false,
+        "backing": {
+            "file": "",
+            "host_device": "",
+            "type": "FILE"
+        },
+        "start_connected": false
+    } ],
+    "placement": {
+        "cluster": "",
+        "datastore": "",
+        "folder": "",
+        "host": "",
+        "resource_pool": ""
+    },
+    "sata_adapters": [ {
+        "bus": 0,
+        "pci_slot_number": 0,
+        "type": "AHCI"
+    } ],
+    "scsi_adapters": [ {
+        "bus": 0,
+        "pci_slot_number": 0,
+        "sharing": "NONE",
+        "type": "BUSLOGIC"
+    } ],
+    "serial_ports": [ {
+        "allow_guest_control": false,
+        "backing": {
+            "file": "",
+            "host_device": "",
+            "network_location": "",
+            "no_rx_loss": false,
+            "pipe": "",
+            "proxy": "",
+            "type": "FILE"
+        },
+        "start_connected": false,
+        "yield_on_poll": false
+    } ],
+    "storage_policy": {
+        "policy": ""
+    }
+};
+```
+
+```
+$api->setNewVirtualMachine($session_id['data']['value'], $params);
+```
+
+Attention Point!! The GuestOS enumerated type defines the valid guest operating system types used for configuring a virtual machine. (https://developer.vmware.com/apis/vsphere-automation/latest/vcenter/api/vcenter/vm/post/)
+
+### Delete VM
+
+Deletes a virtual machine. if you do not have all of the privileges described as follows: - The resource VirtualMachine referenced by the parameter vm requires VirtualMachine.Inventory.Delete.
+
+```
+$api->deleteVirtualMachine($session_id['data']['value'], $vms['data']['value'][0]['vm']);
+```
+
+### VM Tools
+
+The Tools service provides operations for managing VMware Tools in the guest operating system.
+
+```
+$vm_tools = $api->getVmTools($session_id['data']['value'], $vms['data']['value'][0]['vm']);
+
+/* result
+{
+  "status" => true,
+  "data" => {
+    "value": {
+        "auto_update_supported": true,
+        "upgrade_policy": "MANUAL",
+        "install_attempt_count": 6,
+        "version_status": "CURRENT",
+        "version_number": 10361,
+        "run_state": "RUNNING",
+        "version": "10361",
+        "install_type": "TAR"
+    }
+  }
+}
+*/
+```
+
+### VM Guest
+
+The Customization service provides operations to apply a customization specification to a virtual machine in powered-off status.
+
+```
+$vm_tools = $api->getVmGuest($session_id['data']['value'], $vms['data']['value'][0]['vm'], 'identity');
+
+/* result guest identity
+{
+  "status" => true,
+  "data" => {
+    "value": {
+        "full_name": {
+            "args": [],
+            "default_message": "SUSE Linux Enterprise 12 (64-bit)",
+            "id": "vmsg.guestos.sles12_64Guest.label"
+        },
+        "name": "SLES_12_64",
+        "ip_address": "1.134.252.156",
+        "family": "LINUX",
+        "host_name": "lnrshr1"
+    }
+  }
+}
+*/
+
+------------------------------
+
+$vm_tools = $api->getVmGuest($session_id['data']['value'], $vms['data']['value'][0]['vm'], 'local-filesystem');
+
+/* result guest identity
+{
+  "status" => true,
+  "data" => {
+    "value": [ 
+        {
+            "value": {
+                "mappings": [],
+                "free_space": 1754636288,
+                "capacity": 2077073408
+            },
+            "key": "/tmp"
+        },
+        {
+            "value": {
+                "mappings": [],
+                "free_space": 5155688448,
+                "capacity": 10464022528
+            },
+            "key": "/usr"
+        },
+        {
+            "value": {
+                "mappings": [],
+                "free_space": 821157888,
+                "capacity": 1020702720
+            },
+            "key": "/opt"
+        },
+    ]
+  }
+}
+*/
+
+------------------------------
+
+$vm_tools = $api->getVmGuest($session_id['data']['value'], $vms['data']['value'][0]['vm'], 'power');
+
+/* result guest identity
+{
+  "status" => true,
+  "data" => {
+    "value": {
+        "operations_ready": true,
+        "state": "RUNNING"
+    }
+  }
+}
+*/
+
+```
+
+### VM Hardware Basic
+
+The Hardware service provides operations for configuring the virtual hardware of a virtual machine.
+
+```
+$vm_hardware = $api->getVmHardwareBasic($session_id['data']['value'], $vms['data']['value'][0]['vm']);
+
+/* result
+{
+  "status" => true,
+  "data" => {
+    "value": {
+        "upgrade_policy": "NEVER",
+        "upgrade_status": "NONE",
+        "version": "VMX_13"
+    }
+  }
+}
+*/
+```
+
+### VM HArdware Adapter
+
+* The Sata service provides operations for configuring the virtual SATA adapters of a virtual machine.
+* The Scsi service provides operations for configuring the virtual SCSI adapters of a virtual machine.
+
+```
+$vm_hardware_adapter = $api->getVmHardwareAdapter($session_id['data']['value'], $vms['data']['value'][0]['vm'], 'sata');
+```
+
+### VM Hardware Boot
+
+The Boot service provides operations for configuring the settings used when booting a virtual machine.
+
+```
+$vm_hadware_boot = $api->getVmHardwareBoot($session_id['data']['value'], $vms['data']['value'][0]['vm']);
+
+/* result
+{
+  "status" => true,
+  "data" => {
+    "value": {
+        "delay": 5000,
+        "retry_delay": 10000,
+        "enter_setup_mode": false,
+        "type": "BIOS",
+        "retry": false
+    }
+  }
+}
+*/
+```
+
+### VM Hardware Other Info
+
+List of the informations type:
+
+* cdrom - The Cdrom service provides operations for configuring the virtual CD-ROM devices of a virtual machine.
+* cpu - The Cpu service provides operations for configuring the CPU settings of a virtual machine.
+* disk - The Disk service provides operations for configuring the virtual disks of a virtual machine. A virtual disk has a backing such as a VMDK file.
+* ethernet - The Ethernet service provides operations for configuring the virtual Ethernet adapters of a virtual machine.
+* floppy - The Floppy service provides operations for configuring the virtual floppy drives of a virtual machine.
+* memory - The Memory service provides operations for configuring the memory settings of a virtual machine.
+* parallel - The Parallel service provides operations for configuring the virtual parallel ports of a virtual machine.
+* serial - The Serial service provides operations for configuring the virtual serial ports of a virtual machine.
+
+```
+$vm_hadware_others = $api->getVmHardwareInfo($session_id['data']['value'], $vms['data']['value'][0]['vm'], 'cdrom');
+
+/* result cdrom
+{
+  "status" => true,
+  "data" => {
+    "value": [
+        {
+            "cdrom": "16000"
+        }
+    ]
+  }
+}
+
+result cpu
+{
+  "status" => true,
+  "data" => {
+    "value": {
+        "hot_remove_enabled": false,
+        "count": 9,
+        "hot_add_enabled": false,
+        "cores_per_socket": 3
+    }
+  }
+}
+
+result disk
+{
+  "status" => true,
+  "data" => {
+    "value": [
+        {
+            "disk": "2000"
+        },
+        {
+            "disk": "2001"
+        }
+    ]
+  }
+}
+
+result ethernet
+{
+  "status" => true,
+  "data" => {
+    "value": [
+        {
+            "nic": "4000"
+        },
+        {
+            "nic": "4001"
+        },
+        {
+            "nic": "4002"
+        }
+    ]
+  }
+}
+
+result memory
+{
+  "status" => true,
+  "data" => {
+    "value": {
+        "size_MiB": 51200,
+        "hot_add_enabled": false
+    }
+  }
+}
+*/
+```
+
+### VM Power
+
+The Power service provides operations for managing the power state of a virtual machine.
+
+```
+$vm_power = $api->getFolders($session_id['data']['value']);
+
+/* result vm power
+{
+  "status" => true,
+  "data" => {
+    "value": {
+        "state": "POWERED_ON"
+    }
+  }
+}
+*/
+```
+
+### VM Storage Policy
+
+* The Policy service provides operations to configure the storage policies associated with the virtual machine home and/or its virtual disks.
+* The Compliance service provides operations that return the compliance status of virtual machine entities(virtual machine home directory and virtual disks) that specify storage policy requirements.
+
+```
+$vm_policy = $api->getVmStoragePolicy($session_id['data']['value'], $vms['data']['value'][0]['vm']);
+$vm_policy_compliance = $api->getVmStoragePolicy($session_id['data']['value'], $vms['data']['value'][0]['vm'], true);
+```
+
+## Get Folders
+
+The Folder service provides operations for manipulating a vCenter Server folder.
+
+```
+$filter_example = ['filter.names.1' => 'Teste'];
+
+$folders = $api->getVmPower($session_id['data']['value'], $vms['data']['value'][0]['vm'], $filter_example);
+
+/* result Folders
+{
+  "status" => true,
+  "data" => {
+    "value": [
+        {
+            "folder": "group-d1",
+            "name": "Datacenters",
+            "type": "DATACENTER"
+        },
+        {
+            "folder": "group-d3",
+            "name": "Brazil",
+            "type": "DATACENTER"
+        },
+    ]
+  }
+}
+*/
+```
+
+## vCenter Clusters
+
+The Cluster service provides operations to manage clusters in the vCenter Server.
+
+```
+$clusters = $api->getClusters($session_id['data']['value']);
+
+/* result
+{
+  "status" => true,
+  "data" => {
+    "value": [
+        {
+            "drs_enabled": true,
+            "cluster": "domain-c14174",
+            "name": "Test 1",
+            "ha_enabled": true
+        },
+        {
+            "drs_enabled": false,
+            "cluster": "domain-c160034",
+            "name": "Test 2",
+            "ha_enabled": true
+        }
+    ]
+  }
+}
+*/
+```
+
+## vCenter Datacenters
+
+The Datacenter service provides operations to manage datacenters in the vCenter Server.
+
+```
+$datasore = $api->getDatastores($session_id['data']['value']);
+
+/* result
+{
+  "status" => true,
+  "data" => {
+    "value": [
+        {
+            "name": "Datacenter Teste",
+            "datacenter": "datacenter-1"
+        }
+    ]
+  }
+}
+*/
+```
+
+## vCenter Datastore
+
+The Datastore service provides operations for manipulating a datastore.
+
+```
+$datacenters = $api->getDatacenters($session_id['data']['value']);
+
+/* result
+{
+  "status" => true,
+  "data" => {
+    "value": [
+        {
+            "datastore": "datastore-11133",
+            "name": "datastore_test 1",
+            "type": "VMFS",
+            "free_space": 2032225222656,
+            "capacity": 3298266447872
+        },
+        {
+            "datastore": "datastore-111510",
+            "name": "datastore_test 2",
+            "type": "VMFS",
+            "free_space": 5658868973568,
+            "capacity": 10994847842304
+        }
+    ]
+  }
+}
+*/
 ```
