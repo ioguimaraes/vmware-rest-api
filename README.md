@@ -12,6 +12,17 @@ Basic class PHP compiling the main vCenter API calls, making it possible to simu
 
 * For more information, visit the official API link: https://developer.vmware.com/apis/vsphere-automation/latest/vcenter/
 * The methods present in the class were added to the vCenter framework after version 7.0 U2
+* VMWare Rest API works with PHP 7.4+
+
+## Installation
+
+To install VMWare Rest API PHP, run the folling command:
+
+```
+composer require ioguimaraes/vmware-rest-api
+```
+
+Installation instructions to use the `composer` command can be found on [https://github.com/composer/composer](https://github.com/composer/composer).
 
 ## Authentication
 
