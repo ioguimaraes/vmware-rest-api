@@ -120,7 +120,7 @@ class vmwareRestPHP
             curl_setopt($ch, CURLOPT_VERBOSE, false);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 120);
             curl_setopt($ch, CURLOPT_TIMEOUT, 60); //timeout in seconds
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers); //timeout in seconds
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array_filter($this->headers));
 
             if(!$this->secure){
                 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
